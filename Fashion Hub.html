@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fashion Hub - ร้านเสื้อผ้าแฟชั่นสไตล์คุณ</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: #333;
+        }
+
+        /* Header & Navigation */
+        header {
+            background-color: #0f172a;
+            color: #fff;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #ffffff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            letter-spacing: -0.3px;
+        }
+
+        .logo-icon-box {
+            background: #ffffff;
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+
+        .logo:hover .logo-icon-box {
+            transform: scale(1.05);
+        }
+
+        .logo-svg {
+            width: 22px;
+            height: 22px;
+            stroke: #0f172a;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.1;
+        }
+
+        .logo-text .main-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-text .sub-title {
+            font-size: 0.65rem;
+            color: #94a3b8;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: color 0.2s;
+            padding: 0.5rem 0.8rem;
+            border-radius: 6px;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .cart-status {
+            background-color: #db2777;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            color: white;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .cart-status:hover {
+            background-color: #be185d;
+        }
+
+        /* Views (Page Layouts) */
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Hero Banner & Image Slider */
+        .hero {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            color: white;
+            text-align: center;
+            padding: 2rem 1.5rem 2.5rem 1.5rem;
+        }
+
+        .hero h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero p {
+            color: #cbd5e1;
+            font-size: 1rem;
+        }
+
+        .slider-container {
+            position: relative;
+            max-width: 1200px;
+            width: 100%;
+            margin: 1.5rem auto 0 auto;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .slider {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            width: 100%;
+        }
+
+        .slide {
+            min-width: 100%;
+            height: 500px;
+            position: relative;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .slide-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.85));
+            color: white;
+            padding: 2rem 1rem 1.2rem 1rem;
+            text-align: center;
+        }
+
+        .slide-caption h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .slide-caption p {
+            font-size: 1rem;
+            color: #e2e8f0;
+        }
+
+        .prev-btn, .next-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(15, 23, 42, 0.7);
+            color: white;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: background 0.3s, transform 0.2s;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+        }
+
+        .prev-btn:hover, .next-btn:hover {
+            background-color: #db2777;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .prev-btn { left: 20px; }
+        .next-btn { right: 20px; }
+
+        .slider-dots {
+            position: absolute;
+            bottom: 15px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .dot.active {
+            background-color: #ec4899;
+            transform: scale(1.3);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .section-title {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            color: #0f172a;
+        }
+
+        /* Search & Filter Section */
+        .filter-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-input:focus {
+            border-color: #db2777;
+        }
+
+        .category-container {
+            display: flex;
+            gap: 0.75rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+            scrollbar-width: thin;
+        }
+
+        .category-btn {
+            background-color: #f1f5f9;
+            color: #475569;
+            border: 1px solid #cbd5e1;
+            padding: 0.55rem 1.2rem;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+
+        .category-btn:hover {
+            border-color: #db2777;
+            color: #db2777;
+            background-color: #fdf2f8;
+        }
+
+        .category-btn.active {
+            background-color: #0f172a;
+            color: #ffffff;
+            border-color: #0f172a;
+        }
+
+        /* Product Grid */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-image {
+            height: 260px;
+            width: 100%;
+            object-fit: cover;
+            background-color: #f1f5f9;
+        }
+
+        .product-info {
+            padding: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .product-tag {
+            align-self: flex-start;
+            background-color: #fce7f3;
+            color: #be185d;
+            font-size: 0.75rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .product-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+            padding-top: 1rem;
+        }
+
+        .price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #0f172a;
+        }
+
+        .btn-add {
+            background-color: #db2777;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .btn-add:hover {
+            background-color: #be185d;
+        }
+
+        /* Cart Page Styling */
+        .cart-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .cart-layout {
+                grid-template-columns: 1fr !important;
+            }
+            .slide {
+                height: 300px;
+            }
+            .nav-menu {
+                gap: 0.5rem;
+            }
+        }
+
+        .cart-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .cart-table th, .cart-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .cart-table th {
+            background-color: #f8fafc;
+            color: #475569;
+        }
+
+        .btn-remove {
+            background-color: #ef4444;
+            color: white;
+            border: none;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .cart-summary {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            height: fit-content;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.8rem;
+        }
+
+        .coupon-box {
+            display: flex;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .coupon-box input {
+            width: 100%;
+            padding: 0.6rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            outline: none;
+        }
+
+        .btn-apply {
+            background-color: #334155;
+            color: white;
+            border: none;
+            padding: 0.5rem 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn-continue {
+            background-color: #ffffff;
+            color: #0f172a;
+            border: 1px solid #cbd5e1;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .btn-continue:hover {
+            background-color: #f1f5f9;
+            border-color: #0f172a;
+        }
+
+        .btn-checkout {
+            width: 100%;
+            background-color: #16a34a;
+            color: white;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .btn-checkout:hover {
+            background-color: #15803d;
+        }
+
+        /* footer {
+            text-align: center;
+            padding: 2rem;
+            background-color: #0f172a;
+            color: #94a3b8;
+            margin-top: 3rem;
+        } */
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Header -->
+    <header>
+        <div class="logo" onclick="showPage('home-page')">
+            <div class="logo-icon-box">
+                <svg class="logo-svg" viewBox="0 0 24 24">
+                    <path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/>
+                </svg>
+            </div>
+            <div class="logo-text">
+                <span class="main-title">FASHION HUB</span>
+               
+            </div>
+        </div>
+        <div class="nav-menu">
+            <a class="nav-link active" id="nav-home" onclick="showPage('home-page')">หน้าแรก</a>
+            <a class="nav-link" id="nav-products" onclick="showPage('products-page')">สินค้า</a>
+            <div class="cart-status" onclick="showPage('cart-page')">
+                🛒 ตะกร้าสินค้า (<span id="cart-count">0</span>)
+            </div>
+        </div>
+    </header>
+
+    <!-- PAGE 1: HOME PAGE (หน้าแรก) -->
+    <div id="home-page" class="page active">
+        <section class="hero">
+            <h1>สินค้าแนะนำ</h1>
+            <p>ยกระดับลุคของคุณด้วยเสื้อผ้าคุณภาพสูง พร้อมส่วนลดพิเศษ !!</p>
+
+            <div class="slider-container">
+                <button class="prev-btn" onclick="moveSlide(-1)">❮</button>
+                <button class="next-btn" onclick="moveSlide(1)">❯</button>
+                
+                <div class="slider" id="slider">
+                    <div class="slide">
+                        <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1200&auto=format&fit=crop&q=80" alt="New Arrival Fashion">
+                        <div class="slide-caption">
+                            <h3>New Collection 2026</h3>
+                            <p>คอลเลกชันใหม่ล่าสุดต้อนรับฤดูกาลนี้</p>
+                        </div>
+                    </div>
+                    <div class="slide">
+                        <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1200&auto=format&fit=crop&q=80" alt="Casual Style">
+                        <div class="slide-caption">
+                            <h3>Casual & Minimal Style</h3>
+                            <p>แต่งตัวสบายๆ สไตล์มินิมอล ใส่ได้ทุกวัน</p>
+                        </div>
+                    </div>
+                    <div class="slide">
+                        <img src="https://images.unsplash.com/photo-1445205170230-053b83016050?w=1200&auto=format&fit=crop&q=80" alt="Streetwear Trends">
+                        <div class="slide-caption">
+                            <h3>Streetwear Trend</h3>
+                            <p>แฟชั่นสตรีทแวร์สุดชิค ไม่ซ้ำใคร</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slider-dots">
+                    <span class="dot active" onclick="currentSlide(0)"></span>
+                    <span class="dot" onclick="currentSlide(1)"></span>
+                    <span class="dot" onclick="currentSlide(2)"></span>
+                </div>
+            </div>
+        </section>
+
+        <main class="container">
+            <h2 class="section-title">หมวดหมู่สินค้ายอดนิยม</h2>
+            <div class="category-container" id="home-category-bar"></div>
+            
+            <h2 class="section-title" style="margin-top: 2rem;">สินค้าแนะนำสำหรับคุณ</h2>
+            <div class="product-grid" id="home-featured-products"></div>
+        </main>
+    </div>
+
+    <!-- PAGE 2: PRODUCTS PAGE (หน้าสินค้า) -->
+    <div id="products-page" class="page">
+        <main class="container">
+            <h2 class="section-title">รายการสินค้าทั้งหมด</h2>
+            
+            <!-- ค้นหาและกรองสินค้า -->
+            <div class="filter-section">
+                <div class="search-box">
+                    <input type="text" id="search-input" class="search-input" placeholder="🔍 ค้นหาชื่อสินค้า..." oninput="filterProducts()">
+                </div>
+                <div class="category-container" id="products-category-bar"></div>
+            </div>
+
+            <div class="product-grid" id="product-list"></div>
+        </main>
+    </div>
+
+    <!-- PAGE 3: CART PAGE (หน้าตะกร้าสินค้า / สรุปคำสั่งซื้อ) -->
+    <div id="cart-page" class="page">
+        <main class="container">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h2 class="section-title" style="margin-bottom: 0;">ตะกร้าสินค้าของคุณ</h2>
+                <button class="btn-continue" onclick="showPage('products-page')">
+                    ⬅ เลือกซื้อสินค้าต่อ
+                </button>
+            </div>
+            
+            <div class="cart-layout">
+                <div>
+                    <table class="cart-table">
+                        <thead>
+                            <tr>
+                                <th>สินค้า</th>
+                                <th>ราคา</th>
+                                <th>จำนวน</th>
+                                <th>รวม</th>
+                                <th>จัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cart-items"></tbody>
+                    </table>
+                </div>
+
+                <div class="cart-summary">
+                    <h3>สรุปคำสั่งซื้อ</h3>
+                    <hr style="margin: 0.8rem 0;">
+                    <div class="summary-row">
+                        <span>ราคารวม</span>
+                        <span>฿<span id="subtotal">0</span></span>
+                    </div>
+                    <div class="summary-row" style="color: #16a34a;">
+                        <span>ส่วนลด</span>
+                        <span>-฿<span id="discount">0</span></span>
+                    </div>
+                    <div class="coupon-box">
+                        <input type="text" id="coupon-input" placeholder="ใส่โค้ดส่วนลด (เช่น FASHION10)">
+                        <button class="btn-apply" onclick="applyDiscount()">ใช้โค้ด</button>
+                    </div>
+                    <small style="color: #64748b;">💡 ลองใช้โค้ด: <b>FASHION10</b> (ลด 10%) หรือ <b>SAVE100</b> (ลด ฿100)</small>
+                    <hr style="margin: 0.8rem 0;">
+                    <div class="summary-row" style="font-size: 1.2rem; font-weight: bold;">
+                        <span>ยอดชำระสุทธิ</span>
+                        <span>฿<span id="grand-total">0</span></span>
+                    </div>
+                    <button class="btn-checkout" onclick="confirmOrder()">ยืนยันการสั่งซื้อ</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- <footer>
+        <p>&copy; 2026 Fashion Hub - Express Your Style, Wear Your Confidence.</p>
+    </footer> -->
+
+    <script>
+        // --- SLIDER LOGIC ---
+        let currentSlideIndex = 0;
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.dot');
+        const slider = document.getElementById('slider');
+        let autoSlideTimer;
+
+        function updateSlider() {
+            slider.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlideIndex);
+            });
+        }
+
+        function moveSlide(direction) {
+            currentSlideIndex += direction;
+            if (currentSlideIndex >= slides.length) {
+                currentSlideIndex = 0;
+            } else if (currentSlideIndex < 0) {
+                currentSlideIndex = slides.length - 1;
+            }
+            updateSlider();
+            resetAutoSlide();
+        }
+
+        function currentSlide(index) {
+            currentSlideIndex = index;
+            updateSlider();
+            resetAutoSlide();
+        }
+
+        function startAutoSlide() {
+            autoSlideTimer = setInterval(() => {
+                moveSlide(1);
+            }, 4000);
+        }
+
+        function resetAutoSlide() {
+            clearInterval(autoSlideTimer);
+            startAutoSlide();
+        }
+
+        startAutoSlide();
+
+        // --- PRODUCTS DATA (ปรับเพิ่มเป็น 9 ชิ้น) ---
+        const products = [
+            { id: 1, name: 'เสื้อยืดคอตตอนทรง Oversize', category: 'T-Shirts', tag: 'T-Shirts', price: 390, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS98FBj-qUBdzMZ6el8okgKKk2LzYk9-IbeFKAsDSQK79vGsb0VwZbRlJhf&s=10' },
+            { id: 2, name: 'เสื้อเชิ้ตลายมินิมอล ลุคทางการ/ชิล', category: 'Shirts', tag: 'Shirts', price: 590, image: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=500&auto=format&fit=crop&q=80' },
+            { id: 3, name: 'แจ็คเก็ตยีนส์คลาสสิกทรงวินเทจ', category: 'Outerwear', tag: 'Outerwear', price: 1290, image: 'https://images.unsplash.com/photo-1551537482-f2075a1d41f2?w=500&auto=format&fit=crop&q=80' },
+            { id: 4, name: 'กางเกงขายาวทรงสแล็คเข้ารูป', category: 'Pants', tag: 'Pants', price: 790, image: 'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=500&auto=format&fit=crop&q=80' },
+            { id: 5, name: 'เสื้อฮู้ดดี้สตรีทแวร์ทรงหลวม', category: 'Outerwear', tag: 'Outerwear', price: 990, image: 'https://d29c1z66frfv6c.cloudfront.net/pub/media/catalog/product/zoom/559a9289b50884206020332ff999227553cb4e8c_xxl-1.jpg' },
+            { id: 6, name: 'กางเกงยีนส์เดนิมทรงขากระบอก', category: 'Pants', tag: 'Pants', price: 890, image: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=500&auto=format&fit=crop&q=80' },
+            { id: 7, name: 'เสื้อเชิ้ตแขนสั้นลายสก็อต', category: 'Shirts', tag: 'Shirts', price: 490, image: 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=500&auto=format&fit=crop&q=80' },
+            { id: 8, name: 'เสื้อโปโลเนื้อผ้าพรีเมียม', category: 'T-Shirts', tag: 'T-Shirts', price: 450, image: 'https://i0.wp.com/thanaplus.com/wp-content/uploads/2022/06/%E0%B9%80%E0%B8%AA%E0%B8%B7%E0%B9%89%E0%B8%AD%E0%B9%82%E0%B8%9B%E0%B9%82%E0%B8%A5polo.jpg?resize=800%2C800&ssl=1' },
+            { id: 9, name: 'กางเกงขาสั้นขากว้างใส่สบาย', category: 'Pants', tag: 'Pants', price: 350, image: 'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?w=500&auto=format&fit=crop&q=80' }
+        ];
+
+        const categories = [
+            { id: 'all', name: 'ทั้งหมด 🛍️' },
+            { id: 'T-Shirts', name: 'เสื้อยืด 👕' },
+            { id: 'Shirts', name: 'เสื้อเชิ้ต 👔' },
+            { id: 'Outerwear', name: 'เสื้อคลุม / แจ็คเก็ต 🧥' },
+            { id: 'Pants', name: 'กางเกง 👖' }
+        ];
+
+        let selectedCategory = 'all';
+        let cart = [];
+        let discountAmount = 0;
+        let appliedCoupon = '';
+
+        // --- ROUTING / PAGE NAVIGATION ---
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+
+            // Update Nav Highlight
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            if (pageId === 'home-page') document.getElementById('nav-home').classList.add('active');
+            if (pageId === 'products-page') document.getElementById('nav-products').classList.add('active');
+
+            window.scrollTo(0, 0);
+        }
+
+        // --- HOME PAGE RENDER ---
+        function renderHomePage() {
+            // Render Categories
+            const catContainer = document.getElementById('home-category-bar');
+            catContainer.innerHTML = categories.map(cat => `
+                <button class="category-btn" onclick="selectCategoryAndGoToProducts('${cat.id}')">
+                    ${cat.name}
+                </button>
+            `).join('');
+
+            // Render Featured Products (Top 6)
+            const featuredList = document.getElementById('home-featured-products');
+            featuredList.innerHTML = products.slice(0, 6).map(p => `
+                <div class="product-card">
+                    <img src="${p.image}" alt="${p.name}" class="product-image">
+                    <div class="product-info">
+                        <span class="product-tag">${p.tag}</span>
+                        <h3 class="product-title">${p.name}</h3>
+                        <div class="product-footer">
+                            <span class="price">฿${p.price}</span>
+                            <button class="btn-add" onclick="addToCart(${p.id})">เพิ่มลงตะกร้า</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function selectCategoryAndGoToProducts(catId) {
+            selectedCategory = catId;
+            showPage('products-page');
+            renderProductsPage();
+        }
+
+        // --- PRODUCTS PAGE RENDER & FILTER ---
+        function renderProductsPage() {
+            // Render Categories
+            const catContainer = document.getElementById('products-category-bar');
+            catContainer.innerHTML = categories.map(cat => `
+                <button class="category-btn ${selectedCategory === cat.id ? 'active' : ''}" 
+                        onclick="filterCategory('${cat.id}')">
+                    ${cat.name}
+                </button>
+            `).join('');
+
+            filterProducts();
+        }
+
+        function filterCategory(catId) {
+            selectedCategory = catId;
+            renderProductsPage();
+        }
+
+        function filterProducts() {
+            const searchText = document.getElementById('search-input').value.toLowerCase().trim();
+            const list = document.getElementById('product-list');
+
+            const filteredProducts = products.filter(p => {
+                const matchCategory = selectedCategory === 'all' || p.category === selectedCategory;
+                const matchSearch = p.name.toLowerCase().includes(searchText);
+                return matchCategory && matchSearch;
+            });
+
+            if (filteredProducts.length === 0) {
+                list.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #64748b; padding: 2rem 0;">ไม่พบสินค้าที่ค้นหา</p>`;
+                return;
+            }
+
+            list.innerHTML = filteredProducts.map(p => `
+                <div class="product-card">
+                    <img src="${p.image}" alt="${p.name}" class="product-image">
+                    <div class="product-info">
+                        <span class="product-tag">${p.tag}</span>
+                        <h3 class="product-title">${p.name}</h3>
+                        <div class="product-footer">
+                            <span class="price">฿${p.price}</span>
+                            <button class="btn-add" onclick="addToCart(${p.id})">เพิ่มลงตะกร้า</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // --- CART LOGIC ---
+        function addToCart(productId) {
+            const item = cart.find(c => c.id === productId);
+            if (item) {
+                item.qty++;
+            } else {
+                const product = products.find(p => p.id === productId);
+                cart.push({ ...product, qty: 1 });
+            }
+            updateCart();
+            alert('เพิ่มสินค้าลงตะกร้าเรียบร้อย!');
+        }
+
+        function updateCart() {
+            const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+            document.getElementById('cart-count').innerText = totalQty;
+
+            const cartBody = document.getElementById('cart-items');
+            if (cart.length === 0) {
+                cartBody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 2rem; color: #64748b;">ไม่มีสินค้าในตะกร้า</td></tr>';
+            } else {
+                cartBody.innerHTML = cart.map(item => `
+                    <tr>
+                        <td>${item.name}</td>
+                        <td>฿${item.price}</td>
+                        <td>${item.qty}</td>
+                        <td>฿${item.price * item.qty}</td>
+                        <td><button class="btn-remove" onclick="removeFromCart(${item.id})">ลบ</button></td>
+                    </tr>
+                `).join('');
+            }
+
+            calculateTotal();
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCart();
+        }
+
+        function calculateTotal() {
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            
+            if (appliedCoupon === 'FASHION10') {
+                discountAmount = subtotal * 0.10;
+            } else if (appliedCoupon === 'SAVE100') {
+                discountAmount = 100;
+            } else {
+                discountAmount = 0;
+            }
+
+            const grandTotal = Math.max(0, subtotal - discountAmount);
+
+            document.getElementById('subtotal').innerText = subtotal;
+            document.getElementById('discount').innerText = discountAmount.toFixed(0);
+            document.getElementById('grand-total').innerText = grandTotal.toFixed(0);
+        }
+
+        function applyDiscount() {
+            const code = document.getElementById('coupon-input').value.trim().toUpperCase();
+            if (code === 'FASHION10' || code === 'SAVE100') {
+                appliedCoupon = code;
+                alert(`ใช้โค้ดส่วนลด ${code} สำเร็จ!`);
+            } else {
+                appliedCoupon = '';
+                alert('โค้ดส่วนลดไม่ถูกต้อง');
+            }
+            calculateTotal();
+        }
+
+        function confirmOrder() {
+            if (cart.length === 0) {
+                alert('โปรดเลือกสินค้าลงตะกร้าก่อนยืนยันการสั่งซื้อ');
+                return;
+            }
+            alert('บันทึกคำสั่งซื้อเรียบร้อยแล้ว! ขอบคุณที่อุดหนุน Fashion Hub');
+            cart = [];
+            appliedCoupon = '';
+            document.getElementById('coupon-input').value = '';
+            updateCart();
+            showPage('home-page');
+        }
+
+        // Initialize App
+        renderHomePage();
+        renderProductsPage();
+    </script>
+</body>
+</html>
